@@ -25,14 +25,19 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals("GET") && path.matches("/api/posts/?$")) {
         controller.all(resp);
         return;
       }
+      long postID = 0;
+      try {
+        postID = Long.parseLong(path.substring(path.lastIndexOf("/")));
+      } catch (NumberFormatException e) {
+        // It's OK. Just use zero.
+      }
       if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
         // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
-        controller.getById(id, resp);
+        controller.getById(postID, resp);
         return;
       }
       if (method.equals("POST") && path.equals("/api/posts")) {
@@ -41,8 +46,7 @@ public class MainServlet extends HttpServlet {
       }
       if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
         // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
-        controller.removeById(id, resp);
+        controller.removeById(postID, resp);
         return;
       }
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
