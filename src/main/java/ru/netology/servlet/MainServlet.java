@@ -25,14 +25,8 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals("GET") && path.matches("/api/posts/?$")) {
         controller.all(resp);
-        return;
-      }
-      if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
-        // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
-        controller.getById(id, resp);
         return;
       }
       if (method.equals("POST") && path.equals("/api/posts")) {
@@ -41,8 +35,13 @@ public class MainServlet extends HttpServlet {
       }
       if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
         // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
-        controller.removeById(id, resp);
+        controller.removeById(getPostID(path), resp);
+        return;
+      }
+
+      if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
+        // easy way
+        controller.getById(getPostID(path), resp);
         return;
       }
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -50,6 +49,10 @@ public class MainServlet extends HttpServlet {
       e.printStackTrace();
       resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private long getPostID (String path) {
+    return Long.parseLong(path.substring(path.lastIndexOf("/")));
   }
 }
 
