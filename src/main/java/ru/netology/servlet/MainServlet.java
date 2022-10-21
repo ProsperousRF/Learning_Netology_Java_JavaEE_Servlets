@@ -52,7 +52,7 @@ public class MainServlet extends HttpServlet {
   }
 
   private long getPostID (String path) {
-    return Long.parseLong(path.substring(path.lastIndexOf("/")));
+    return Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
   }
 }
 
