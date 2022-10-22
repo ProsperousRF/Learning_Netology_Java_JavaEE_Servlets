@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/
 *.class
+target/
 
 ### STS ###
 .apt_generated
