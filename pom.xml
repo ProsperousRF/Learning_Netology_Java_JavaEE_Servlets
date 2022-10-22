@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.netology</groupId>
-    <artifactId>beans-annotation</artifactId>
+    <artifactId>beans-config</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
